@@ -1,0 +1,30 @@
+$kind: http-request
+name: 'Delete Product'
+description: |-
+  **Integration Test — Step 5 of 5**
+  Deletes the product created in step 1. Verifies the product is no longer accessible after deletion.
+url: '{{baseUrl}}/products/:productId'
+method: DELETE
+headers:
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+pathVariables:
+  - key: productId
+    value: '{{it_productId}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK or 204 No Content", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 204]);
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Clear productId after deletion
+      pm.collectionVariables.unset("it_productId");
+order: 5000

@@ -1,0 +1,39 @@
+$kind: http-request
+name: 'Get Product'
+description: |-
+  **Integration Test — Step 3 of 5**
+  Fetches the product created in step 1 by its `it_productId`.
+url: '{{baseUrl}}/products/:productId'
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+pathVariables:
+  - key: productId
+    value: '{{it_productId}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK", function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test("Product ID matches created product", function () {
+        const json = pm.response.json();
+        pm.expect(json.id).to.eql(pm.collectionVariables.get("it_productId"));
+      });
+
+      pm.test("Product has required fields", function () {
+        const json = pm.response.json();
+        pm.expect(json).to.have.property("name");
+        pm.expect(json).to.have.property("price");
+        pm.expect(json).to.have.property("category");
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+order: 3000

@@ -1,0 +1,48 @@
+$kind: http-request
+name: 'Register User'
+description: |-
+  **Integration Test — Step 1 of 4**
+  Registers a new unique user. Captures `userId` and `token` into collection variables for downstream tests.
+url: '{{baseUrl}}/users/register'
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "testuser_{{$randomInt}}",
+      "email": "testuser_{{$randomInt}}@integration.test",
+      "password": "IntegrationPass123!"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 201 Created", function () {
+        pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has user object", function () {
+        const json = pm.response.json();
+        pm.expect(json).to.have.property("id");
+        pm.expect(json).to.have.property("username");
+        pm.expect(json).to.have.property("email");
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Capture userId and token for downstream tests
+      const json = pm.response.json();
+      if (json.id) {
+        pm.collectionVariables.set("it_userId", json.id);
+      }
+      if (json.token) {
+        pm.collectionVariables.set("it_token", json.token);
+      }
+order: 1000

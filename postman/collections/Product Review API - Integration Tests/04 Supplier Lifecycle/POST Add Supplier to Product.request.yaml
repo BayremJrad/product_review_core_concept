@@ -1,0 +1,61 @@
+$kind: http-request
+name: 'Add Supplier to Product'
+description: |-
+  **Integration Test — Step 1 of 5**
+  Adds a new supplier to a product. Uses `it_productId` from the Product Lifecycle flow.
+  Captures `it_supplierId` for downstream supplier tests.
+  
+  **Prerequisite:** Run "02 Product Lifecycle / POST Create Product" first to populate `it_productId`.
+url: '{{baseUrl}}/products/:productId/suppliers'
+method: POST
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+pathVariables:
+  - key: productId
+    value: '{{it_productId}}'
+body:
+  type: json
+  content: |-
+    {
+      "name": "Integration Test Distributors",
+      "email": "contact@integrationtest.com",
+      "phone": "+1-800-555-9999",
+      "address": "999 Test Ave, San Francisco, CA 94105",
+      "country": "US",
+      "website": "https://integrationtest.com"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 201 Created", function () {
+        pm.response.to.have.status(201);
+      });
+
+      pm.test("Response has supplier object with id", function () {
+        const json = pm.response.json();
+        pm.expect(json).to.have.property("id");
+        pm.expect(json).to.have.property("name");
+        pm.expect(json).to.have.property("email");
+      });
+
+      pm.test("Supplier name matches request", function () {
+        const json = pm.response.json();
+        pm.expect(json.name).to.eql("Integration Test Distributors");
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Capture supplierId for downstream tests
+      const json = pm.response.json();
+      if (json.id) {
+        pm.collectionVariables.set("it_supplierId", json.id);
+      }
+order: 1000

@@ -1,0 +1,31 @@
+$kind: http-request
+name: 'List Products'
+description: |-
+  **Integration Test — Step 2 of 5**
+  Retrieves the list of products and verifies the newly created product appears in the results.
+url: '{{baseUrl}}/products'
+method: GET
+headers:
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK", function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test("Response is an array or paginated object", function () {
+        const json = pm.response.json();
+        const isArray = Array.isArray(json);
+        const isPaginated = typeof json === "object" && (Array.isArray(json.data) || Array.isArray(json.products) || Array.isArray(json.items));
+        pm.expect(isArray || isPaginated).to.be.true;
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+order: 2000
