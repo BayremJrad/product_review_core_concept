@@ -1,0 +1,32 @@
+$kind: http-request
+name: 'Remove Supplier from Product'
+description: |-
+  **Integration Test — Step 5 of 5**
+  Removes the supplier from the product. Verifies the supplier association is removed.
+url: '{{baseUrl}}/products/:productId/suppliers/:supplierId'
+method: DELETE
+headers:
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+pathVariables:
+  - key: productId
+    value: '{{it_productId}}'
+  - key: supplierId
+    value: '{{it_supplierId}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK or 204 No Content", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 204]);
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+
+      // Clear supplierId after removal
+      pm.collectionVariables.unset("it_supplierId");
+order: 5000

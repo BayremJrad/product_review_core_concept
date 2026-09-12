@@ -1,0 +1,47 @@
+$kind: http-request
+name: 'Update Product'
+description: |-
+  **Integration Test — Step 4 of 5**
+  Updates the product created in step 1. Verifies the updated fields are reflected in the response.
+url: '{{baseUrl}}/products/:productId'
+method: PUT
+headers:
+  - key: Content-Type
+    value: application/json
+  - key: Accept
+    value: application/json
+  - key: Authorization
+    value: 'Bearer {{it_token}}'
+pathVariables:
+  - key: productId
+    value: '{{it_productId}}'
+body:
+  type: json
+  content: |-
+    {
+      "name": "Integration Test Headphones Pro",
+      "description": "Updated by automated integration test",
+      "price": 199.99
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status is 200 OK", function () {
+        pm.response.to.have.status(200);
+      });
+
+      pm.test("Product name was updated", function () {
+        const json = pm.response.json();
+        pm.expect(json.name).to.eql("Integration Test Headphones Pro");
+      });
+
+      pm.test("Product price was updated", function () {
+        const json = pm.response.json();
+        pm.expect(json.price).to.eql(199.99);
+      });
+
+      pm.test("Response time is under 2000ms", function () {
+        pm.expect(pm.response.responseTime).to.be.below(2000);
+      });
+order: 4000

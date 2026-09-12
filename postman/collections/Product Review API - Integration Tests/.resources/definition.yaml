@@ -1,0 +1,29 @@
+$kind: collection
+name: Product Review API - Integration Tests
+description: |-
+  # Product Review API — Integration Tests
+
+  End-to-end integration tests for the Product Review API. Each folder represents a complete lifecycle flow that runs in sequence, chaining outputs (IDs, tokens) from one step to the next via **collection variables**.
+
+  ## Flows
+
+  | Folder | Steps | Variables Produced |
+  |---|---|---|
+  | **01 User Auth Flow** | Register → Login → Get Profile → Update Profile | `it_userId`, `it_token` |
+  | **02 Product Lifecycle** | Create → List → Get → Update → Delete | `it_productId` |
+  | **03 Review Lifecycle** | Create → List → Get → Update → Delete | `it_reviewId` |
+  | **04 Supplier Lifecycle** | Add → List → Get → Update → Remove | `it_supplierId` |
+
+  ## How to Run
+
+  1. Set the `baseUrl` variable in your environment (e.g. `http://localhost:3000`).
+  2. Run the **01 User Auth Flow** folder first — it populates `it_token` and `it_userId`.
+  3. Run **02 Product Lifecycle** to create a product and populate `it_productId`.
+  4. Run **03 Review Lifecycle** and **04 Supplier Lifecycle** (both depend on `it_productId`).
+
+  > **Tip:** Use the Postman Collection Runner to run all folders in order with a single click.
+
+variables:
+  it_userId: ""
+  it_token: ""
+  baseUrl: ""
