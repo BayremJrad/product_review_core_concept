@@ -1,0 +1,12 @@
+$kind: http-request
+description: Retrieve details of a specific product by ID.
+url: "{{baseUrl}}/products/:productId"
+method: GET
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  productId: ""
+settings: {}
+examples: ./.resources/GET Get Product.resources/examples
+order: 2000

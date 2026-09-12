@@ -1,0 +1,23 @@
+$kind: http-request
+description: Add a new supplier and associate them with a product.
+url: "{{baseUrl}}/products/:productId/suppliers"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  productId: ""
+body:
+  type: json
+  content: |-
+    {
+      "name": "TechDistributors Inc.",
+      "email": "contact@techdistributors.com",
+      "phone": "+1-800-555-0199",
+      "address": "123 Supply Chain Ave, San Francisco, CA 94105",
+      "country": "US",
+      "website": "https://techdistributors.com"
+    }
+settings: {}
+examples: ./.resources/POST Add Supplier to Product.resources/examples
+order: 3000

@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    productId: prod_999
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "PRODUCT_NOT_FOUND",
+          "message": "No product found with the given ID.",
+          "productId": "prod_999"
+        }
+      }
+order: 2000

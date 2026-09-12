@@ -1,0 +1,20 @@
+$kind: http-request
+description: Retrieve all reviews for a specific product.
+url: "{{baseUrl}}/products/:productId/reviews?page=1&limit=10"
+method: GET
+headers:
+  Accept: application/json
+  Content-Type: application/json
+queryParams:
+  - key: page
+    value: "1"
+  - key: limit
+    value: "10"
+  - key: rating
+    value: ""
+    disabled: true
+pathVariables:
+  productId: ""
+settings: {}
+examples: ./.resources/GET List Reviews for Product.resources/examples
+order: 1000

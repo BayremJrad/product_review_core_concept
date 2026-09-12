@@ -1,0 +1,32 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:userId"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    userId: user_123
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "user": {
+            "id": "user_123",
+            "username": "johndoe",
+            "bio": "Avid tech reviewer",
+            "reviewCount": 15,
+            "joinedAt": "2024-01-01T00:00:00Z"
+          }
+        }
+      }
+order: 1000

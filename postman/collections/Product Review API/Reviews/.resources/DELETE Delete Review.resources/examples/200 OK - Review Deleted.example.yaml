@@ -1,0 +1,27 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/reviews/:reviewId"
+  method: DELETE
+  headers:
+    Accept: application/json
+  pathVariables:
+    reviewId: rev_001
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "message": "Review successfully deleted.",
+        "data": {
+          "reviewId": "rev_001"
+        }
+      }
+order: 1000

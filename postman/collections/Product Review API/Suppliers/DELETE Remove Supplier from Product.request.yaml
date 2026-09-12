@@ -1,0 +1,13 @@
+$kind: http-request
+description: Remove a supplier's association with a product.
+url: "{{baseUrl}}/products/:productId/suppliers/:supplierId"
+method: DELETE
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  productId: ""
+  supplierId: ""
+settings: {}
+examples: ./.resources/DELETE Remove Supplier from Product.resources/examples
+order: 5000

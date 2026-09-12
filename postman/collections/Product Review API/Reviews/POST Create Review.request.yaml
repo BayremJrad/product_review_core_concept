@@ -1,0 +1,21 @@
+$kind: http-request
+description: Submit a new review for a product.
+url: "{{baseUrl}}/products/:productId/reviews"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  productId: ""
+body:
+  type: json
+  content: |-
+    {
+      "rating": 5,
+      "title": "Excellent product!",
+      "body": "I've been using this for 3 months and it's fantastic.",
+      "userId": "user_123"
+    }
+settings: {}
+examples: ./.resources/POST Create Review.resources/examples
+order: 3000

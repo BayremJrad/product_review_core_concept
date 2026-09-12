@@ -1,0 +1,12 @@
+$kind: http-request
+description: Retrieve a specific review by ID.
+url: "{{baseUrl}}/reviews/:reviewId"
+method: GET
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  reviewId: ""
+settings: {}
+examples: ./.resources/GET Get Review.resources/examples
+order: 2000

@@ -1,0 +1,20 @@
+$kind: http-request
+description: Create a new product.
+url: "{{baseUrl}}/products"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Wireless Headphones",
+      "description": "Premium noise-cancelling wireless headphones",
+      "category": "Electronics",
+      "price": 199.99,
+      "imageUrl": "https://example.com/images/headphones.jpg"
+    }
+settings: {}
+examples: ./.resources/POST Create Product.resources/examples
+order: 3000

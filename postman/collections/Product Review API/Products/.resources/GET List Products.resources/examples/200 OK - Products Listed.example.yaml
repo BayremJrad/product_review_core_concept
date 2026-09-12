@@ -1,0 +1,61 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products?minPrice=0&maxPrice=1000&minRating=1&sortBy=createdAt&sortOrder=desc&search="
+  method: GET
+  headers:
+    x-mock-response-name: 200 OK - Products Listed
+    Accept: application/json
+  queryParams:
+    minPrice: "0"
+    maxPrice: "1000"
+    minRating: "1"
+    sortBy: createdAt
+    sortOrder: desc
+    search: ""
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "products": [
+            {
+              "id": "prod_001",
+              "name": "Wireless Headphones",
+              "description": "Premium noise-cancelling wireless headphones",
+              "category": "Electronics",
+              "price": 199.99,
+              "averageRating": 4.5,
+              "reviewCount": 128,
+              "imageUrl": "https://example.com/images/headphones.jpg",
+              "createdAt": "2024-01-15T10:00:00Z"
+            },
+            {
+              "id": "prod_002",
+              "name": "Running Shoes",
+              "description": "Lightweight running shoes for all terrains",
+              "category": "Sports",
+              "price": 89.99,
+              "averageRating": 4.2,
+              "reviewCount": 75,
+              "imageUrl": "https://example.com/images/shoes.jpg",
+              "createdAt": "2024-01-20T08:30:00Z"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "limit": 10,
+            "total": 2,
+            "totalPages": 1
+          }
+        }
+      }
+order: 1000

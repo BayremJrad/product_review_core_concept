@@ -1,0 +1,18 @@
+$kind: http-request
+description: Register a new user account.
+url: "{{baseUrl}}/users/register"
+method: POST
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  type: json
+  content: |-
+    {
+      "username": "johndoe",
+      "email": "john.doe@example.com",
+      "password": "SecurePass123!"
+    }
+settings: {}
+examples: ./.resources/POST Register User.resources/examples
+order: 1000

@@ -1,0 +1,20 @@
+$kind: http-request
+description: Update an existing product.
+url: "{{baseUrl}}/products/:productId"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  productId: ""
+body:
+  type: json
+  content: |-
+    {
+      "name": "Wireless Headphones Pro",
+      "description": "Premium noise-cancelling wireless headphones with extended battery",
+      "price": 249.99
+    }
+settings: {}
+examples: ./.resources/PUT Update Product.resources/examples
+order: 4000

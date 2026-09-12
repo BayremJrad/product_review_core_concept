@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    productId: prod_999
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Wireless Headphones Pro",
+        "description": "Premium noise-cancelling wireless headphones with extended battery",
+        "price": 249.99
+      }
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "PRODUCT_NOT_FOUND",
+          "message": "No product found with the given ID.",
+          "productId": "prod_999"
+        }
+      }
+order: 2000

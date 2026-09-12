@@ -1,0 +1,10 @@
+workspace:
+  id: 6fac2626-bbbc-45a6-b550-ad563a968c67
+cloudResources:
+  specs:
+    ../postman/specs/Product Review API Contract/index.yaml: 6ea5f4ec-e171-44a3-87be-b5a46d2fc1f6
+  collections:
+    ../postman/collections/Product Review API: 58037910-10de3d59-8a7b-4013-a72d-7b7c5c69caaa
+resourceNameMappings:
+  specs:
+    - ../postman/specs/Product Review API Contract/index.yaml: Product Review API Contract

@@ -1,0 +1,43 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Wireless Headphones",
+        "description": "Premium noise-cancelling wireless headphones",
+        "category": "Electronics",
+        "price": 199.99,
+        "imageUrl": "https://example.com/images/headphones.jpg"
+      }
+response:
+  statusCode: 422
+  statusText: Unprocessable Entity (WebDAV) (RFC 4918)
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "VALIDATION_ERROR",
+          "message": "Request body validation failed.",
+          "details": [
+            {
+              "field": "name",
+              "message": "name is required"
+            },
+            {
+              "field": "price",
+              "message": "price must be a positive number"
+            }
+          ]
+        }
+      }
+order: 2000

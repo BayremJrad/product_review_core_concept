@@ -1,0 +1,45 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/suppliers"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    productId: prod_001
+  body:
+    type: json
+    content: |-
+      {
+        "name": "TechDistributors Inc.",
+        "email": "contact@techdistributors.com",
+        "phone": "+1-800-555-0199",
+        "address": "123 Supply Chain Ave, San Francisco, CA 94105",
+        "country": "US",
+        "website": "https://techdistributors.com"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "supplier": {
+            "id": "sup_003",
+            "name": "TechDistributors Inc.",
+            "email": "contact@techdistributors.com",
+            "phone": "+1-800-555-0199",
+            "address": "123 Supply Chain Ave, San Francisco, CA 94105",
+            "country": "US",
+            "website": "https://techdistributors.com",
+            "productId": "prod_001",
+            "createdAt": "2024-06-01T09:00:00Z"
+          }
+        }
+      }
+order: 1000

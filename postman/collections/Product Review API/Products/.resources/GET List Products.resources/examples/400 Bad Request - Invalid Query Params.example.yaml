@@ -1,0 +1,39 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products?minPrice=0&maxPrice=1000&minRating=1&sortBy=createdAt&sortOrder=desc&search="
+  method: GET
+  headers:
+    x-mock-response-name: 200 OK - Products Listed
+    Accept: application/json
+  queryParams:
+    minPrice: "0"
+    maxPrice: "1000"
+    minRating: "1"
+    sortBy: createdAt
+    sortOrder: desc
+    search: ""
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 400
+  statusText: Bad Request
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "INVALID_QUERY_PARAMS",
+          "message": "Invalid query parameters provided.",
+          "details": [
+            {
+              "field": "limit",
+              "message": "limit must be a positive integer between 1 and 100"
+            }
+          ]
+        }
+      }
+order: 2000

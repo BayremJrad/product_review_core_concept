@@ -1,0 +1,54 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/suppliers?page=1&limit=10"
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    page: "1"
+    limit: "10"
+  pathVariables:
+    productId: prod_001
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "suppliers": [
+            {
+              "id": "sup_001",
+              "name": "TechDistributors Inc.",
+              "email": "contact@techdistributors.com",
+              "phone": "+1-800-555-0199",
+              "country": "US",
+              "website": "https://techdistributors.com",
+              "createdAt": "2024-01-10T08:00:00Z"
+            },
+            {
+              "id": "sup_002",
+              "name": "GlobalSupply Co.",
+              "email": "info@globalsupply.com",
+              "phone": "+44-20-7946-0958",
+              "country": "GB",
+              "website": "https://globalsupply.com",
+              "createdAt": "2024-02-05T10:30:00Z"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "limit": 10,
+            "total": 2,
+            "totalPages": 1
+          }
+        }
+      }
+order: 1000

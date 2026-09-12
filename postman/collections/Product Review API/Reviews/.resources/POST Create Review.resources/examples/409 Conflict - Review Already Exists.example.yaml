@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/reviews"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    productId: prod_001
+  body:
+    type: json
+    content: |-
+      {
+        "rating": 5,
+        "title": "Excellent product!",
+        "body": "I've been using this for 3 months and it's fantastic.",
+        "userId": "user_123"
+      }
+response:
+  statusCode: 409
+  statusText: Conflict
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "REVIEW_ALREADY_EXISTS",
+          "message": "User has already submitted a review for this product.",
+          "existingReviewId": "rev_001"
+        }
+      }
+order: 2000

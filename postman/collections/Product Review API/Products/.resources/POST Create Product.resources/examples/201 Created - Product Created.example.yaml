@@ -1,0 +1,42 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "name": "Wireless Headphones",
+        "description": "Premium noise-cancelling wireless headphones",
+        "category": "Electronics",
+        "price": 199.99,
+        "imageUrl": "https://example.com/images/headphones.jpg"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "product": {
+            "id": "prod_003",
+            "name": "Wireless Headphones",
+            "description": "Premium noise-cancelling wireless headphones",
+            "category": "Electronics",
+            "price": 199.99,
+            "averageRating": 0,
+            "reviewCount": 0,
+            "imageUrl": "https://example.com/images/headphones.jpg",
+            "createdAt": "2024-06-01T09:00:00Z"
+          }
+        }
+      }
+order: 1000

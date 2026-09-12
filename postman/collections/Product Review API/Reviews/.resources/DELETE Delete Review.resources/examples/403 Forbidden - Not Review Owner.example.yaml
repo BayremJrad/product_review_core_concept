@@ -1,0 +1,27 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/reviews/:reviewId"
+  method: DELETE
+  headers:
+    Accept: application/json
+  pathVariables:
+    reviewId: rev_001
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "You do not have permission to delete this review."
+        }
+      }
+order: 2000

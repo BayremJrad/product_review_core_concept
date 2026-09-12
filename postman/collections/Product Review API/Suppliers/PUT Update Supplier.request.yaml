@@ -1,0 +1,20 @@
+$kind: http-request
+description: Update an existing supplier's details.
+url: "{{baseUrl}}/suppliers/:supplierId"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  supplierId: ""
+body:
+  type: json
+  content: |-
+    {
+      "name": "TechDistributors Pro",
+      "email": "support@techdistributorspro.com",
+      "phone": "+1-800-555-0200"
+    }
+settings: {}
+examples: ./.resources/PUT Update Supplier.resources/examples
+order: 4000

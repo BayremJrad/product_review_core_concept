@@ -1,0 +1,57 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/reviews?page=1&limit=10&rating="
+  method: GET
+  headers:
+    Accept: application/json
+  queryParams:
+    page: "1"
+    limit: "10"
+    rating: ""
+  pathVariables:
+    productId: prod_001
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "reviews": [
+            {
+              "id": "rev_001",
+              "productId": "prod_001",
+              "userId": "user_123",
+              "username": "johndoe",
+              "rating": 5,
+              "title": "Excellent product!",
+              "body": "I've been using this for 3 months and it's fantastic.",
+              "createdAt": "2024-02-10T12:00:00Z"
+            },
+            {
+              "id": "rev_002",
+              "productId": "prod_001",
+              "userId": "user_456",
+              "username": "janedoe",
+              "rating": 4,
+              "title": "Great but pricey",
+              "body": "Sound quality is amazing, but the price is a bit high.",
+              "createdAt": "2024-03-05T09:15:00Z"
+            }
+          ],
+          "pagination": {
+            "page": 1,
+            "limit": 10,
+            "total": 2,
+            "totalPages": 1
+          }
+        }
+      }
+order: 1000

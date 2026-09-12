@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/suppliers/:supplierId"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    supplierId: sup_999
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "SUPPLIER_NOT_FOUND",
+          "message": "No supplier found with the given ID.",
+          "supplierId": "sup_999"
+        }
+      }
+order: 2000

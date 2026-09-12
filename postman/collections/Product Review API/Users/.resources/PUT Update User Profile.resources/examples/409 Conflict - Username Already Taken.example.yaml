@@ -1,0 +1,32 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:userId"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    userId: user_123
+  body:
+    type: json
+    content: |-
+      {
+        "username": "johndoe_updated",
+        "bio": "Avid tech reviewer"
+      }
+response:
+  statusCode: 409
+  statusText: Conflict
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "USERNAME_TAKEN",
+          "message": "The username 'johndoe_updated' is already taken."
+        }
+      }
+order: 2000

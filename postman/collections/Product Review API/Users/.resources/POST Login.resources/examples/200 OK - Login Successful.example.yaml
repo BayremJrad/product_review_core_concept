@@ -1,0 +1,35 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/login"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "email": "john.doe@example.com",
+        "password": "SecurePass123!"
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "user": {
+            "id": "user_123",
+            "username": "johndoe",
+            "email": "john.doe@example.com"
+          },
+          "token": "{{supabase_service_role_api_key_05iy}}",
+          "expiresIn": 3600
+        }
+      }
+order: 1000

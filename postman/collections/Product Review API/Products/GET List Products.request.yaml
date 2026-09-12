@@ -1,0 +1,30 @@
+$kind: http-request
+description: Retrieve a paginated list of all products.
+url: "{{baseUrl}}/products"
+method: GET
+headers:
+  x-mock-response-name: 200 OK - Products Listed
+  Accept: application/json
+  Content-Type: application/json
+queryParams:
+  - key: minPrice
+    value: "0"
+    disabled: true
+  - key: maxPrice
+    value: "1000"
+    disabled: true
+  - key: minRating
+    value: "1"
+    disabled: true
+  - key: sortBy
+    value: createdAt
+    disabled: true
+  - key: sortOrder
+    value: desc
+    disabled: true
+  - key: search
+    value: ""
+    disabled: true
+settings: {}
+examples: ./.resources/GET List Products.resources/examples
+order: 1000

@@ -1,0 +1,12 @@
+$kind: http-request
+description: Retrieve details of a specific supplier by ID.
+url: "{{baseUrl}}/suppliers/:supplierId"
+method: GET
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  supplierId: ""
+settings: {}
+examples: ./.resources/GET Get Supplier.resources/examples
+order: 2000

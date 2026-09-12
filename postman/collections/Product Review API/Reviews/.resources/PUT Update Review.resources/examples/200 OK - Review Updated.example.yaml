@@ -1,0 +1,40 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/reviews/:reviewId"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    reviewId: rev_001
+  body:
+    type: json
+    content: |-
+      {
+        "rating": 4,
+        "title": "Great product, minor issues",
+        "body": "Updated my review after extended use."
+      }
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "review": {
+            "id": "rev_001",
+            "productId": "prod_001",
+            "userId": "user_123",
+            "rating": 4,
+            "title": "Great product, minor issues",
+            "body": "Updated my review after extended use.",
+            "updatedAt": "2024-06-15T14:00:00Z"
+          }
+        }
+      }
+order: 1000

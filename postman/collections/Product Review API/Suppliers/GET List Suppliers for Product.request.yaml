@@ -1,0 +1,15 @@
+$kind: http-request
+description: Retrieve all suppliers associated with a specific product.
+url: "{{baseUrl}}/products/:productId/suppliers?page=1&limit=10"
+method: GET
+headers:
+  Accept: application/json
+  Content-Type: application/json
+queryParams:
+  page: "1"
+  limit: "10"
+pathVariables:
+  productId: ""
+settings: {}
+examples: ./.resources/GET List Suppliers for Product.resources/examples
+order: 1000

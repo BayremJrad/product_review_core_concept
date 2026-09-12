@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/reviews/:reviewId"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    reviewId: rev_999
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "REVIEW_NOT_FOUND",
+          "message": "No review found with the given ID.",
+          "reviewId": "rev_999"
+        }
+      }
+order: 2000

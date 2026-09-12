@@ -1,0 +1,19 @@
+$kind: http-request
+description: Update a user's profile information.
+url: "{{baseUrl}}/users/:userId"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  userId: ""
+body:
+  type: json
+  content: |-
+    {
+      "username": "johndoe_updated",
+      "bio": "Avid tech reviewer"
+    }
+settings: {}
+examples: ./.resources/PUT Update User Profile.resources/examples
+order: 4000

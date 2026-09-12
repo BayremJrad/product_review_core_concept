@@ -1,0 +1,28 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/users/:userId"
+  method: GET
+  headers:
+    Accept: application/json
+  pathVariables:
+    userId: user_999
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "USER_NOT_FOUND",
+          "message": "No user found with the given ID.",
+          "userId": "user_999"
+        }
+      }
+order: 2000

@@ -1,0 +1,42 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/reviews"
+  method: POST
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    productId: prod_001
+  body:
+    type: json
+    content: |-
+      {
+        "rating": 5,
+        "title": "Excellent product!",
+        "body": "I've been using this for 3 months and it's fantastic.",
+        "userId": "user_123"
+      }
+response:
+  statusCode: 201
+  statusText: Created
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "success",
+        "data": {
+          "review": {
+            "id": "rev_003",
+            "productId": "prod_001",
+            "userId": "user_123",
+            "username": "johndoe",
+            "rating": 5,
+            "title": "Excellent product!",
+            "body": "I've been using this for 3 months and it's fantastic.",
+            "createdAt": "2024-06-01T10:00:00Z"
+          }
+        }
+      }
+order: 1000

@@ -1,0 +1,20 @@
+$kind: http-request
+description: Update an existing review.
+url: "{{baseUrl}}/reviews/:reviewId"
+method: PUT
+headers:
+  Content-Type: application/json
+  Accept: application/json
+pathVariables:
+  reviewId: ""
+body:
+  type: json
+  content: |-
+    {
+      "rating": 4,
+      "title": "Great product, minor issues",
+      "body": "Updated my review after extended use."
+    }
+settings: {}
+examples: ./.resources/PUT Update Review.resources/examples
+order: 4000

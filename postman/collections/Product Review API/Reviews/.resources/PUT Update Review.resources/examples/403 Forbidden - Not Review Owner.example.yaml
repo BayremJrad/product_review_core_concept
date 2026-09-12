@@ -1,0 +1,33 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/reviews/:reviewId"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    reviewId: rev_001
+  body:
+    type: json
+    content: |-
+      {
+        "rating": 4,
+        "title": "Great product, minor issues",
+        "body": "Updated my review after extended use."
+      }
+response:
+  statusCode: 403
+  statusText: Forbidden
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "You do not have permission to update this review."
+        }
+      }
+order: 2000

@@ -1,0 +1,9 @@
+$kind: collection
+name: Product Review API
+description: API for managing products, reviews and users in a product review application.
+variables:
+  - key: baseUrl
+    value: https://api.productreview.com/v1
+    secret: false
+  - key: supabase_service_role_api_key_05iy
+    secret: true

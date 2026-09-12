@@ -1,0 +1,30 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/products/:productId/suppliers/:supplierId"
+  method: DELETE
+  headers:
+    Accept: application/json
+  pathVariables:
+    productId: prod_999
+    supplierId: sup_999
+  body:
+    type: json
+    content: ""
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "SUPPLIER_PRODUCT_ASSOCIATION_NOT_FOUND",
+          "message": "No association found between the given product and supplier.",
+          "productId": "prod_999",
+          "supplierId": "sup_999"
+        }
+      }
+order: 2000

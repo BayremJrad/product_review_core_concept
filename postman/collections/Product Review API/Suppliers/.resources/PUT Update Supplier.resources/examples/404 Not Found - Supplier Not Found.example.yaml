@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: "{{baseUrl}}/suppliers/:supplierId"
+  method: PUT
+  headers:
+    Content-Type: application/json
+    Accept: application/json
+  pathVariables:
+    supplierId: sup_999
+  body:
+    type: json
+    content: |-
+      {
+        "name": "TechDistributors Pro",
+        "email": "support@techdistributorspro.com",
+        "phone": "+1-800-555-0200"
+      }
+response:
+  statusCode: 404
+  statusText: Not Found
+  headers:
+    Content-Type: application/json
+  body:
+    type: json
+    content: |-
+      {
+        "status": "error",
+        "error": {
+          "code": "SUPPLIER_NOT_FOUND",
+          "message": "No supplier found with the given ID.",
+          "supplierId": "sup_999"
+        }
+      }
+order: 2000

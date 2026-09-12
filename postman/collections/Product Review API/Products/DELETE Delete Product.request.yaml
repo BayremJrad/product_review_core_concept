@@ -1,0 +1,12 @@
+$kind: http-request
+description: Delete a product by ID.
+url: "{{baseUrl}}/products/:productId"
+method: DELETE
+headers:
+  Accept: application/json
+  Content-Type: application/json
+pathVariables:
+  productId: ""
+settings: {}
+examples: ./.resources/DELETE Delete Product.resources/examples
+order: 5000

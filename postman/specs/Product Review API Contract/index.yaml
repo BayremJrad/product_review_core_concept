@@ -1,0 +1,1741 @@
+openapi: 3.0.0
+info:
+  title: Product Review API
+  version: 1.0.0
+  description: >-
+    API for managing products, reviews and users in a product review
+    application.
+servers:
+  - url: https://api.productreview.com/v1
+paths:
+  /products:
+    get:
+      summary: GET List Products
+      parameters:
+        - name: minPrice
+          in: query
+          schema:
+            type: integer
+          example: '0'
+        - name: maxPrice
+          in: query
+          schema:
+            type: integer
+          example: '1000'
+        - name: minRating
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+          example: createdAt
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+          example: desc
+        - name: search
+          in: query
+          schema:
+            type: string
+          example: ''
+        - name: x-mock-response-name
+          in: header
+          schema:
+            type: string
+          example: 200 OK - Products Listed
+      responses:
+        '200':
+          description: 200 OK - Products Listed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      products:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            description:
+                              type: string
+                            category:
+                              type: string
+                            price:
+                              type: number
+                            averageRating:
+                              type: number
+                            reviewCount:
+                              type: integer
+                            imageUrl:
+                              type: string
+                              format: uri
+                            createdAt:
+                              type: string
+                              format: date-time
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                          limit:
+                            type: integer
+                          total:
+                            type: integer
+                          totalPages:
+                            type: integer
+              example:
+                status: success
+                data:
+                  products:
+                    - id: prod_001
+                      name: Wireless Headphones
+                      description: Premium noise-cancelling wireless headphones
+                      category: Electronics
+                      price: 199.99
+                      averageRating: 4.5
+                      reviewCount: 128
+                      imageUrl: https://example.com/images/headphones.jpg
+                      createdAt: '2024-01-15T10:00:00Z'
+                    - id: prod_002
+                      name: Running Shoes
+                      description: Lightweight running shoes for all terrains
+                      category: Sports
+                      price: 89.99
+                      averageRating: 4.2
+                      reviewCount: 75
+                      imageUrl: https://example.com/images/shoes.jpg
+                      createdAt: '2024-01-20T08:30:00Z'
+                  pagination:
+                    page: 1
+                    limit: 10
+                    total: 2
+                    totalPages: 1
+        '400':
+          description: 400 Bad Request - Invalid Query Params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      details:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            field:
+                              type: string
+                            message:
+                              type: string
+              example:
+                status: error
+                error:
+                  code: INVALID_QUERY_PARAMS
+                  message: Invalid query parameters provided.
+                  details:
+                    - field: limit
+                      message: limit must be a positive integer between 1 and 100
+      tags:
+        - Products
+      description: Retrieve a paginated list of all products.
+    post:
+      summary: POST Create Product
+      responses:
+        '201':
+          description: 201 Created - Product Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      product:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          category:
+                            type: string
+                          price:
+                            type: number
+                          averageRating:
+                            type: integer
+                          reviewCount:
+                            type: integer
+                          imageUrl:
+                            type: string
+                            format: uri
+                          createdAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  product:
+                    id: prod_003
+                    name: Wireless Headphones
+                    description: Premium noise-cancelling wireless headphones
+                    category: Electronics
+                    price: 199.99
+                    averageRating: 0
+                    reviewCount: 0
+                    imageUrl: https://example.com/images/headphones.jpg
+                    createdAt: '2024-06-01T09:00:00Z'
+        '422':
+          description: 422 Unprocessable Entity - Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      details:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            field:
+                              type: string
+                            message:
+                              type: string
+              example:
+                status: error
+                error:
+                  code: VALIDATION_ERROR
+                  message: Request body validation failed.
+                  details:
+                    - field: name
+                      message: name is required
+                    - field: price
+                      message: price must be a positive number
+      tags:
+        - Products
+      description: Create a new product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                category:
+                  type: string
+                price:
+                  type: number
+                imageUrl:
+                  type: string
+                  format: uri
+            example:
+              name: Wireless Headphones
+              description: Premium noise-cancelling wireless headphones
+              category: Electronics
+              price: 199.99
+              imageUrl: https://example.com/images/headphones.jpg
+  /products/{productId}:
+    get:
+      summary: GET Get Product
+      responses:
+        '200':
+          description: 200 OK - Product Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      product:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          category:
+                            type: string
+                          price:
+                            type: number
+                          averageRating:
+                            type: number
+                          reviewCount:
+                            type: integer
+                          imageUrl:
+                            type: string
+                            format: uri
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  product:
+                    id: prod_001
+                    name: Wireless Headphones
+                    description: Premium noise-cancelling wireless headphones
+                    category: Electronics
+                    price: 199.99
+                    averageRating: 4.5
+                    reviewCount: 128
+                    imageUrl: https://example.com/images/headphones.jpg
+                    createdAt: '2024-01-15T10:00:00Z'
+                    updatedAt: '2024-03-10T14:22:00Z'
+        '404':
+          description: 404 Not Found - Product Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: PRODUCT_NOT_FOUND
+                  message: No product found with the given ID.
+                  productId: prod_999
+      tags:
+        - Products
+      description: Retrieve details of a specific product by ID.
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+    put:
+      summary: PUT Update Product
+      responses:
+        '200':
+          description: 200 OK - Product Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      product:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          description:
+                            type: string
+                          category:
+                            type: string
+                          price:
+                            type: number
+                          averageRating:
+                            type: number
+                          reviewCount:
+                            type: integer
+                          imageUrl:
+                            type: string
+                            format: uri
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  product:
+                    id: prod_001
+                    name: Wireless Headphones Pro
+                    description: >-
+                      Premium noise-cancelling wireless headphones with extended
+                      battery
+                    category: Electronics
+                    price: 249.99
+                    averageRating: 4.5
+                    reviewCount: 128
+                    imageUrl: https://example.com/images/headphones.jpg
+                    updatedAt: '2024-06-15T11:30:00Z'
+        '404':
+          description: 404 Not Found - Product Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: PRODUCT_NOT_FOUND
+                  message: No product found with the given ID.
+                  productId: prod_999
+      tags:
+        - Products
+      description: Update an existing product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+            example:
+              name: Wireless Headphones Pro
+              description: >-
+                Premium noise-cancelling wireless headphones with extended
+                battery
+              price: 249.99
+    delete:
+      summary: DELETE Delete Product
+      responses:
+        '200':
+          description: 200 OK - Product Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+              example:
+                status: success
+                message: Product successfully deleted.
+                data:
+                  productId: prod_001
+        '404':
+          description: 404 Not Found - Product Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: PRODUCT_NOT_FOUND
+                  message: No product found with the given ID.
+                  productId: prod_999
+      tags:
+        - Products
+      description: Delete a product by ID.
+  /products/{productId}/reviews:
+    get:
+      summary: GET List Reviews for Product
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 10
+        - name: rating
+          in: query
+          schema:
+            type: string
+          example: ''
+      responses:
+        '200':
+          description: 200 OK - Reviews Listed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      reviews:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            productId:
+                              type: string
+                            userId:
+                              type: string
+                            username:
+                              type: string
+                            rating:
+                              type: integer
+                            title:
+                              type: string
+                            body:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                          limit:
+                            type: integer
+                          total:
+                            type: integer
+                          totalPages:
+                            type: integer
+              example:
+                status: success
+                data:
+                  reviews:
+                    - id: rev_001
+                      productId: prod_001
+                      userId: user_123
+                      username: johndoe
+                      rating: 5
+                      title: Excellent product!
+                      body: I've been using this for 3 months and it's fantastic.
+                      createdAt: '2024-02-10T12:00:00Z'
+                    - id: rev_002
+                      productId: prod_001
+                      userId: user_456
+                      username: janedoe
+                      rating: 4
+                      title: Great but pricey
+                      body: Sound quality is amazing, but the price is a bit high.
+                      createdAt: '2024-03-05T09:15:00Z'
+                  pagination:
+                    page: 1
+                    limit: 10
+                    total: 2
+                    totalPages: 1
+        '404':
+          description: 404 Not Found - Product Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: PRODUCT_NOT_FOUND
+                  message: No product found with the given ID.
+                  productId: prod_999
+      tags:
+        - Reviews
+      description: Retrieve all reviews for a specific product.
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+    post:
+      summary: POST Create Review
+      responses:
+        '201':
+          description: 201 Created - Review Submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      review:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          productId:
+                            type: string
+                          userId:
+                            type: string
+                          username:
+                            type: string
+                          rating:
+                            type: integer
+                          title:
+                            type: string
+                          body:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  review:
+                    id: rev_003
+                    productId: prod_001
+                    userId: user_123
+                    username: johndoe
+                    rating: 5
+                    title: Excellent product!
+                    body: I've been using this for 3 months and it's fantastic.
+                    createdAt: '2024-06-01T10:00:00Z'
+        '409':
+          description: 409 Conflict - Review Already Exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      existingReviewId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: REVIEW_ALREADY_EXISTS
+                  message: User has already submitted a review for this product.
+                  existingReviewId: rev_001
+      tags:
+        - Reviews
+      description: Submit a new review for a product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                title:
+                  type: string
+                body:
+                  type: string
+                userId:
+                  type: string
+            example:
+              rating: 5
+              title: Excellent product!
+              body: I've been using this for 3 months and it's fantastic.
+              userId: user_123
+  /reviews/{reviewId}:
+    get:
+      summary: GET Get Review
+      responses:
+        '200':
+          description: 200 OK - Review Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      review:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          productId:
+                            type: string
+                          userId:
+                            type: string
+                          username:
+                            type: string
+                          rating:
+                            type: integer
+                          title:
+                            type: string
+                          body:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  review:
+                    id: rev_001
+                    productId: prod_001
+                    userId: user_123
+                    username: johndoe
+                    rating: 5
+                    title: Excellent product!
+                    body: I've been using this for 3 months and it's fantastic.
+                    createdAt: '2024-02-10T12:00:00Z'
+                    updatedAt: '2024-02-10T12:00:00Z'
+        '404':
+          description: 404 Not Found - Review Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      reviewId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: REVIEW_NOT_FOUND
+                  message: No review found with the given ID.
+                  reviewId: rev_999
+      tags:
+        - Reviews
+      description: Retrieve a specific review by ID.
+    parameters:
+      - name: reviewId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+    put:
+      summary: PUT Update Review
+      responses:
+        '200':
+          description: 200 OK - Review Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      review:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          productId:
+                            type: string
+                          userId:
+                            type: string
+                          rating:
+                            type: integer
+                          title:
+                            type: string
+                          body:
+                            type: string
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  review:
+                    id: rev_001
+                    productId: prod_001
+                    userId: user_123
+                    rating: 4
+                    title: Great product, minor issues
+                    body: Updated my review after extended use.
+                    updatedAt: '2024-06-15T14:00:00Z'
+        '403':
+          description: 403 Forbidden - Not Review Owner
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: FORBIDDEN
+                  message: You do not have permission to update this review.
+      tags:
+        - Reviews
+      description: Update an existing review.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                title:
+                  type: string
+                body:
+                  type: string
+            example:
+              rating: 4
+              title: Great product, minor issues
+              body: Updated my review after extended use.
+    delete:
+      summary: DELETE Delete Review
+      responses:
+        '200':
+          description: 200 OK - Review Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      reviewId:
+                        type: string
+              example:
+                status: success
+                message: Review successfully deleted.
+                data:
+                  reviewId: rev_001
+        '403':
+          description: 403 Forbidden - Not Review Owner
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: FORBIDDEN
+                  message: You do not have permission to delete this review.
+      tags:
+        - Reviews
+      description: Delete a review by ID.
+  /users/register:
+    post:
+      summary: POST Register User
+      responses:
+        '201':
+          description: 201 Created - User Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          username:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                          createdAt:
+                            type: string
+                            format: date-time
+                      token:
+                        type: string
+              example:
+                status: success
+                data:
+                  user:
+                    id: user_123
+                    username: johndoe
+                    email: john.doe@example.com
+                    createdAt: '2024-06-01T08:00:00Z'
+                  token: >-
+                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyXzEyMyJ9.abc123
+        '409':
+          description: 409 Conflict - Email Already Registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: EMAIL_ALREADY_EXISTS
+                  message: An account with this email address already exists.
+      tags:
+        - Users
+      description: Register a new user account.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+            example:
+              username: johndoe
+              email: john.doe@example.com
+              password: SecurePass123!
+  /users/login:
+    post:
+      summary: POST Login
+      responses:
+        '200':
+          description: 200 OK - Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          username:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                      token:
+                        type: string
+                      expiresIn:
+                        type: integer
+              example:
+                status: success
+                data:
+                  user:
+                    id: user_123
+                    username: johndoe
+                    email: john.doe@example.com
+                  token: >-
+                    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1c2VyXzEyMyJ9.abc123
+                  expiresIn: 3600
+        '401':
+          description: 401 Unauthorized - Invalid Credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: INVALID_CREDENTIALS
+                  message: The email or password provided is incorrect.
+      tags:
+        - Users
+      description: Authenticate a user and receive a token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+            example:
+              email: john.doe@example.com
+              password: SecurePass123!
+  /users/{userId}:
+    get:
+      summary: GET Get User Profile
+      responses:
+        '200':
+          description: 200 OK - User Profile Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          username:
+                            type: string
+                          bio:
+                            type: string
+                          reviewCount:
+                            type: integer
+                          joinedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  user:
+                    id: user_123
+                    username: johndoe
+                    bio: Avid tech reviewer
+                    reviewCount: 15
+                    joinedAt: '2024-01-01T00:00:00Z'
+        '404':
+          description: 404 Not Found - User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      userId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: USER_NOT_FOUND
+                  message: No user found with the given ID.
+                  userId: user_999
+      tags:
+        - Users
+      description: Retrieve a user's public profile.
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+        example: ''
+    put:
+      summary: PUT Update User Profile
+      responses:
+        '200':
+          description: 200 OK - Profile Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          username:
+                            type: string
+                          bio:
+                            type: string
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  user:
+                    id: user_123
+                    username: johndoe_updated
+                    bio: Avid tech reviewer
+                    updatedAt: '2024-06-15T16:00:00Z'
+        '409':
+          description: 409 Conflict - Username Already Taken
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: USERNAME_TAKEN
+                  message: The username 'johndoe_updated' is already taken.
+      tags:
+        - Users
+      description: Update a user's profile information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                bio:
+                  type: string
+            example:
+              username: johndoe_updated
+              bio: Avid tech reviewer
+  /products/{productId}/suppliers:
+    get:
+      summary: GET List Suppliers for Product
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          example: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: 10
+      responses:
+        '200':
+          description: 200 OK - Suppliers Listed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      suppliers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                              format: email
+                            phone:
+                              type: string
+                            country:
+                              type: string
+                            website:
+                              type: string
+                              format: uri
+                            createdAt:
+                              type: string
+                              format: date-time
+                      pagination:
+                        type: object
+                        properties:
+                          page:
+                            type: integer
+                          limit:
+                            type: integer
+                          total:
+                            type: integer
+                          totalPages:
+                            type: integer
+              example:
+                status: success
+                data:
+                  suppliers:
+                    - id: sup_001
+                      name: TechDistributors Inc.
+                      email: contact@techdistributors.com
+                      phone: +1-800-555-0199
+                      country: US
+                      website: https://techdistributors.com
+                      createdAt: '2024-01-10T08:00:00Z'
+                    - id: sup_002
+                      name: GlobalSupply Co.
+                      email: info@globalsupply.com
+                      phone: +44-20-7946-0958
+                      country: GB
+                      website: https://globalsupply.com
+                      createdAt: '2024-02-05T10:30:00Z'
+                  pagination:
+                    page: 1
+                    limit: 10
+                    total: 2
+                    totalPages: 1
+        '404':
+          description: 404 Not Found - Product Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: PRODUCT_NOT_FOUND
+                  message: No product found with the given ID.
+                  productId: prod_999
+      tags:
+        - Suppliers
+      description: Retrieve all suppliers associated with a specific product.
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: POST Add Supplier to Product
+      responses:
+        '201':
+          description: 201 Created - Supplier Added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      supplier:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                          phone:
+                            type: string
+                          address:
+                            type: string
+                          country:
+                            type: string
+                          website:
+                            type: string
+                            format: uri
+                          productId:
+                            type: string
+                          createdAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  supplier:
+                    id: sup_003
+                    name: TechDistributors Inc.
+                    email: contact@techdistributors.com
+                    phone: +1-800-555-0199
+                    address: 123 Supply Chain Ave, San Francisco, CA 94105
+                    country: US
+                    website: https://techdistributors.com
+                    productId: prod_001
+                    createdAt: '2024-06-01T09:00:00Z'
+        '422':
+          description: 422 Unprocessable Entity - Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      details:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            field:
+                              type: string
+                            message:
+                              type: string
+              example:
+                status: error
+                error:
+                  code: VALIDATION_ERROR
+                  message: Request body validation failed.
+                  details:
+                    - field: name
+                      message: name is required
+                    - field: email
+                      message: email must be a valid email address
+      tags:
+        - Suppliers
+      description: Add a new supplier and associate them with a product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                address:
+                  type: string
+                country:
+                  type: string
+                website:
+                  type: string
+                  format: uri
+            example:
+              name: TechDistributors Inc.
+              email: contact@techdistributors.com
+              phone: +1-800-555-0199
+              address: 123 Supply Chain Ave, San Francisco, CA 94105
+              country: US
+              website: https://techdistributors.com
+  /suppliers/{supplierId}:
+    get:
+      summary: GET Get Supplier
+      responses:
+        '200':
+          description: 200 OK - Supplier Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      supplier:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                          phone:
+                            type: string
+                          address:
+                            type: string
+                          country:
+                            type: string
+                          website:
+                            type: string
+                            format: uri
+                          products:
+                            type: array
+                            items:
+                              type: string
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  supplier:
+                    id: sup_001
+                    name: TechDistributors Inc.
+                    email: contact@techdistributors.com
+                    phone: +1-800-555-0199
+                    address: 123 Supply Chain Ave, San Francisco, CA 94105
+                    country: US
+                    website: https://techdistributors.com
+                    products:
+                      - prod_001
+                      - prod_003
+                    createdAt: '2024-01-10T08:00:00Z'
+                    updatedAt: '2024-04-20T12:00:00Z'
+        '404':
+          description: 404 Not Found - Supplier Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      supplierId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: SUPPLIER_NOT_FOUND
+                  message: No supplier found with the given ID.
+                  supplierId: sup_999
+      tags:
+        - Suppliers
+      description: Retrieve details of a specific supplier by ID.
+    parameters:
+      - name: supplierId
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      summary: PUT Update Supplier
+      responses:
+        '200':
+          description: 200 OK - Supplier Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      supplier:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                          phone:
+                            type: string
+                          address:
+                            type: string
+                          country:
+                            type: string
+                          website:
+                            type: string
+                            format: uri
+                          updatedAt:
+                            type: string
+                            format: date-time
+              example:
+                status: success
+                data:
+                  supplier:
+                    id: sup_001
+                    name: TechDistributors Pro
+                    email: support@techdistributorspro.com
+                    phone: +1-800-555-0200
+                    address: 123 Supply Chain Ave, San Francisco, CA 94105
+                    country: US
+                    website: https://techdistributors.com
+                    updatedAt: '2024-06-15T14:00:00Z'
+        '404':
+          description: 404 Not Found - Supplier Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      supplierId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: SUPPLIER_NOT_FOUND
+                  message: No supplier found with the given ID.
+                  supplierId: sup_999
+      tags:
+        - Suppliers
+      description: Update an existing supplier's details.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+            example:
+              name: TechDistributors Pro
+              email: support@techdistributorspro.com
+              phone: +1-800-555-0200
+  /products/{productId}/suppliers/{supplierId}:
+    delete:
+      summary: DELETE Remove Supplier from Product
+      responses:
+        '200':
+          description: 200 OK - Supplier Removed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      productId:
+                        type: string
+                      supplierId:
+                        type: string
+              example:
+                status: success
+                message: Supplier successfully removed from product.
+                data:
+                  productId: prod_001
+                  supplierId: sup_001
+        '404':
+          description: 404 Not Found - Association Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+                      productId:
+                        type: string
+                      supplierId:
+                        type: string
+              example:
+                status: error
+                error:
+                  code: SUPPLIER_PRODUCT_ASSOCIATION_NOT_FOUND
+                  message: No association found between the given product and supplier.
+                  productId: prod_999
+                  supplierId: sup_999
+      tags:
+        - Suppliers
+      description: Remove a supplier's association with a product.
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: supplierId
+        in: path
+        required: true
+        schema:
+          type: string
